@@ -19,13 +19,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.*;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.zxing.activity.CaptureActivity;
 import eluoen.ghdcp.util.Constant;
 import eluoen.ghdcp.util.HttpUtil;
 import java.io.*;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.lang.ref.WeakReference;
 import android.app.ProgressDialog;
@@ -43,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText editQrCode;
     private Button btnSearch;
     private TextView txtInfo;//查询结果
+
+    private String qrcode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +93,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startQrCode();
                 break;
             case R.id.btn_search:
-                processThreadSearch();
+                qrcode = editQrCode.getText().toString().trim();
+                if(qrcode.length()>=5){
+                    processThreadSearch();
+                }else{
+                    Toast.makeText(MainActivity.this, "至少输入5个字符", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
         }
     }
@@ -169,8 +182,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         new Thread() {
             public void run() {
 
-                String path = HttpUtil.IP + "/pda_updateGoods";
-                String result = HttpUtil.httpClient(null,path,"POST");
+                String result;
+                try{
+
+                    String path = HttpUtil.IP + "/pda/pda_search?qrcode="+qrcode;
+                    result = HttpUtil.httpClient(null,path,"POST");
+
+                }catch(Exception e){
+
+                    result=e.getMessage();
+                }
 
                 Message msg = new Message();
                 msg.obj = result;
@@ -197,7 +218,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             MainActivity activity = reference.get();
             activity.progressDialog.dismiss();
 
-            activity.txtInfo.setText(msg.obj.toString());
+            try{
+
+                Type type = new TypeToken<List<Map<String,String>>>(){}.getType();
+                Gson gson = new Gson();
+                List<Map<String,String>> list = gson.fromJson(msg.obj.toString(),type);
+
+                if (list!=null&&list.size()>0){
+
+                    StringBuffer sb = new StringBuffer();
+                    sb.append("查询结果：\n");
+                    for (Map<String,String> map:list) {
+                        sb.append("编码："+map.get("qrcode")+"\n");
+                        sb.append("产品："+map.get("goodsPname")+"---"+map.get("goodsName")+"\n");
+                        sb.append("客户："+map.get("clientPname")+"---"+map.get("clientName")+"\n");
+                        sb.append("发货时间："+map.get("date")+" "+map.get("time")+"\n");
+                        sb.append("\n\n");
+
+                    }
+
+                    activity.txtInfo.setText(sb.toString());
+
+                }else{
+
+                    activity.txtInfo.setText("查询结果：\n没有查到该编码的物流信息\n没有找到和该编码匹配的数据\n该编码在系统里不存在");
+
+                }
+
+            }catch (Exception e){
+                e.printStackTrace();
+
+                activity.txtInfo.setText(msg.obj.toString()+"\n\n"+e.getMessage());
+
+            }
+
+
+
+
 
         }
 
