@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()){
             case R.id.btn_test:
 
-            Toast.makeText(this,"第一次github测试",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"第五次github测试",Toast.LENGTH_LONG).show();
 
             break;
 
