@@ -1,10 +1,12 @@
 package eluoen.ghdcp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import junit.framework.Test;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -26,7 +28,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()){
             case R.id.btn_test:
 
-            Toast.makeText(this,"第五次github测试",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"第六次github测试",Toast.LENGTH_LONG).show();
+
+                Intent intent = new Intent(MainActivity.this,TestActivity.class);
+                startActivity(intent);
+
 
             break;
 
