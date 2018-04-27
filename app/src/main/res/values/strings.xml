@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">ghdcp</string>
+    <string name="app_name">扫码查询</string>
+    <string name="scan_or_edit">SCAN OR EDIT</string>
+    <string name="scan">SCAN</string>
+    <string name="search">查询</string>
+
 </resources>
