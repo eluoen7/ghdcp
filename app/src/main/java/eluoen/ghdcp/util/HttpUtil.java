@@ -16,7 +16,7 @@ import static java.net.Proxy.Type.HTTP;
 public class HttpUtil {
 	
 	//public static String IP="http://120.77.49.216/gdsalt_dataup_pda/";
-	public static String IP="http://192.168.1.188/ghd/";
+	public static String IP="http://ghd.niqan.com/ghd/";
 	
 	public static VersionMessage vm = null;
 
