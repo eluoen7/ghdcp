@@ -128,7 +128,7 @@ public class HttpUtil {
 		int versionCode = -1;
 		try {
 			versionCode = context.getPackageManager().getPackageInfo(
-					"eluoen.ghdp", 0).versionCode;
+					"eluoen.ghdcp", 0).versionCode;
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -145,7 +145,7 @@ public class HttpUtil {
 		String versionName = "";
 		try {
 			versionName = context.getPackageManager().getPackageInfo(
-					"eluoen.ghdp", 0).versionName;
+					"eluoen.ghdcp", 0).versionName;
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -165,7 +165,7 @@ public class HttpUtil {
 
 		URL url;
 		try {
-			url = new URL(IP+"version.json");
+			url = new URL(IP+"version_c.json");
 			urlConn = (HttpURLConnection) url.openConnection();
 			System.out.println("url:"+url);
 
